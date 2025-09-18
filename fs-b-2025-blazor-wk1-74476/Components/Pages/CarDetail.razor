@@ -1,0 +1,30 @@
+﻿@page "/cars/{id:int}"
+@using System.Globalization
+@inject NavigationManager Nav
+
+@if (car is null)
+{
+    <p>Car Not Found</p>
+    <NavLink class="btn btn-secondary" href="/cars">Back to list</NavLink>
+}
+else
+{
+    <h3>@car.Model</h3>
+    <ul class="list-unstyled">
+        <li><strong>Brand:</strong> @car.Brand</li>
+        <li><strong>Year:</strong> @car.Year</li>
+        <li><strong>Type:</strong> @car.Type</li>
+        <li><strong>Rating:</strong> @car.Rating.ToString("0.0", CultureInfo.InvariantCulture)</li>
+    </ul>
+    <NavLink class="btn btn-secondary" href="/cars">Back to list</NavLink>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private Car? car;
+
+    protected override void OnParametersSet()
+    {
+        car = CarRepository.GetCars().FirstOrDefault(c => c.Id == id);
+    }
+}

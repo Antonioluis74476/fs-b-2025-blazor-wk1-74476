@@ -1,0 +1,50 @@
+﻿@page "/cars"
+@using System.Globalization
+@rendermode InteractiveServer
+
+<h3>Cars</h3>
+
+@if (cars.Count == 0)
+{
+    <p><em>Loading Cars....</em></p>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Brand</th>
+                <th>Year</th>
+                <th>Type</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in cars)
+            {
+                <tr>
+                    <td><a class="car-link" href="@($"/cars/{car.Id}")">@car.Model</a></td>
+                    <td>@car.Brand</td>
+                    <td>@car.Year</td>
+                    <td>@car.Type</td>
+                    <td>@car.Rating.ToString("0.0", CultureInfo.InvariantCulture)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Car> cars = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500); // Simulate loading delay
+        cars = CarRepository.GetCars();
+    }
+}
